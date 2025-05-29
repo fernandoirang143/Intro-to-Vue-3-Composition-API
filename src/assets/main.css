@@ -40,6 +40,10 @@ body {
   border-radius: 50%;
 }
 
+.color-circle.active {
+  border: 2px solid #333;
+}
+
 
 .disabledButton {
   background-color: #d8d8d8;

@@ -1,10 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import socksGreenImage from './assets/images/socks_green.jpeg'
 import socksBlueImage from './assets/images/socks_blue.jpeg'
 
 const product = ref('Socks')
-const image = ref(socksGreenImage)
 const inStock = true
   
 const details = ref(['50% cotton', '30% wool', '20% polyester'])
@@ -14,11 +13,24 @@ const variants = ref([
   { id: 2235, color: 'blue', image: socksBlueImage },
 ])
 
+const selectedVariant = ref(0)
+const image = ref(variants.value[selectedVariant.value].image)
+
 const cart = ref(0)
 
-const addToCart = () => cart.value += 1
+watch(selectedVariant, (newIndex) => {
+  image.value = variants.value[newIndex].image;
+})
 
-const updateImage = (variantImage) => image.value = variantImage
+const addToCart = () => {
+  if(inStock === true) {
+    cart.value += 1
+  }
+} ;
+
+const updateImage = (index) => {
+  selectedVariant.value = index
+}
 
 </script>
   
@@ -37,13 +49,18 @@ const updateImage = (variantImage) => image.value = variantImage
         <ul>
           <li v-for="detail in details">{{ detail }}</li>
         </ul>
-        <div v-for="variant in variants" 
+        <div v-for="(variant, index) in variants" 
           :key="variant.id"
-          @mouseover="updateImage(variant.image)"
+          @mouseover="updateImage(index)"
+          class="color-circle"
+          :class="{ active: selectedVariant === index }"
+          :style="{ backgroundColor: variant.color  }"
         >
-          {{ variant.color }}
         </div>
-        <button class="button" v-on:click="addToCart">Add to cart</button>
+        <button 
+        class="button" 
+        :class="{disabledButton: !inStock}"
+        v-on:click="addToCart">Add to cart</button>
       </div>
     </div>
   </div>
