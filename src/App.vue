@@ -1,7 +1,7 @@
 <script setup>
  import {ref} from 'Vue';
  const product = ref('Socks');
- const description = ref('These are great socks!')
+ const description = ref('These are great socks!');
 </script>
 
 <template>
